@@ -1,13 +1,9 @@
 package todo.TodoTasks.models;
 
-
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Entity
 @Table (name="task")
@@ -18,7 +14,7 @@ public class Task {
     private long id;
 
     @NotBlank(message = "Titre est obligatoire")
-    @Pattern(regexp = "([A-Za-zéàè]+)",message = "titre doit contenir des caractéres alphabitiques")
+    @Pattern(regexp = "([A-Za-zéàè:' ]+)",message = "titre doit contenir des caractéres alphabitiques")
     private String title;
 
 
@@ -31,7 +27,6 @@ public class Task {
     private LocalDate startDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @FutureOrPresent(message="Veuillez sélectionner une date présente ou future")
     @NotNull(message="date d'échance est obligatoire")
     private LocalDate  endDate;
 
@@ -41,8 +36,6 @@ public class Task {
 
 
     //  Getters and setters
-
-
     public long getId() {
         return id;
     }

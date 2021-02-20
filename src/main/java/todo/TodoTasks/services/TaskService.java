@@ -1,12 +1,13 @@
 package todo.TodoTasks.services;
 
-import org.springframework.validation.annotation.Validated;
 import todo.TodoTasks.models.Task;
 import todo.TodoTasks.interfaces.ITaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import todo.TodoTasks.Exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import todo.TodoTasks.repository.TaskRepository;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -16,6 +17,12 @@ public class TaskService implements ITaskService {
     @Autowired
     private TaskRepository repository ;
 
+    public boolean verifyDate(LocalDate date1 )
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+
+        return (date1.isBefore( LocalDate.now()));
+    }
     @Override
     public Task saveTask(Task task)
     {
@@ -35,6 +42,8 @@ public class TaskService implements ITaskService {
                 .orElseThrow(() -> new ResourceNotFoundException("task not found on :: " + task.getId()));
 
        task.setId(id);
+       if(this.verifyDate(task.getEndDate()))
+           task.setStatus("fermée");
         return repository.save(task);
     }
 
